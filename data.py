@@ -250,7 +250,7 @@ def add_node (subset_data, features):
         if debug == 1:
             print ("Labels are the same")
         node = Node ("")
-        node.decision = np.unique (subset_data[:, 0])
+        node.decision = np.unique (subset_data[:, 0])[0]
         return node
     elif debug == 1:
             print ("unique labels", unique_labels)
@@ -296,7 +296,8 @@ def print_tree(node, level):
         print (empty(level + 1), value)
         print_tree(n, level + 2)
 
-mango = Data (fpath = "Tennis_Game.csv")
+#mango = Data (fpath = "Tennis_Game.csv")
+mango = Data (fpath = "test.csv")
 
 node = add_node (mango.raw_data, mango.features)
 
