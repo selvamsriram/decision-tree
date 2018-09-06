@@ -278,30 +278,65 @@ def add_node (subset_data, features):
 
     return node
 
-def empty(size):
+def space(size):
     s = ""
-    for x in range(size):
+    for i in range(size):
         s += "   "
     return s
 
 
-def print_tree(node, level):
+def print_tree(node, depth):
     if node.decision != "":
-        print (empty(level), node.decision)
+        print (space(depth), node.decision)
         return
 
-    print (empty(level), node.feature)
+    print (space(depth), node.feature)
 
     for value, n in node.children:
-        print (empty(level + 1), value)
-        print_tree(n, level + 2)
+        print (space(depth + 1), value)
+        print_tree(n, depth + 2)
 
-#mango = Data (fpath = "Tennis_Game.csv")
-mango = Data (fpath = "test.csv")
 
-node = add_node (mango.raw_data, mango.features)
+def test_dtree_per_row (node, test_row, col_index_feature_dict, feature_col_index_dict):
+    if node.decision != "":
+        return node.decision
 
-print_tree (node, 0)
+    col_index = feature_col_index_dict[node.feature]
+    col_value = test_row[col_index]
+
+    for child in node.children :
+        if col_value == child[0]:
+            return test_dtree_per_row (child[1], test_row, col_index_feature_dict, feature_col_index_dict)
+
+def test_dtree(root, test_data, features):
+    no_of_rows = test_data.shape[0]
+    index_column_dict = dict(enumerate(features))
+    column_index_dict = {v: k for k, v in index_column_dict.items()}
+    mismatch = 0
+    match = 0
+    for i in range (0, no_of_rows):
+        id3_result = test_dtree_per_row (root, test_data [i], index_column_dict, column_index_dict)
+        #print ("Original Result", test_data [i][0], "ID3 Result", id3_result)
+        if id3_result != test_data [i][0]:
+            mismatch += 1
+        else:
+            match += 1
+    
+    print ("Mismatch : ", mismatch, "Match", match)
+
+#mango = Data (fpath = "Tennis_Game_train.csv")
+mango = Data (fpath = "train.csv")
+
+root = add_node (mango.raw_data, mango.features)
+
+print_tree (root, 0)
+
+#test = Data (fpath = "Tennis_Game_test.csv")
+test = Data (fpath = "test.csv")
+test_dtree (root, test.raw_data, test.features)
+
+
+
 # Create a new node, named by the attribute """
 # Delete the selected attribute from the dataset (Delete the column completely) """
 # For each different type of input this attribute can take, we must add a branch and leading decision """
