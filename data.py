@@ -15,7 +15,7 @@ class Data:
 		if not fpath and data is None:
 			raise Exception("Must pass either a path to a data file or a numpy array object")
 
-		self.raw_data, self.attributes, self.index_column_dict, \
+		self.raw_data, self.attributes, self.features, self.index_column_dict, \
 		self.column_index_dict = self._load_data(fpath, data)
 
 	def _load_data(self, fpath = "", data = None):
@@ -36,7 +36,7 @@ class Data:
 
 		attributes = self._set_attributes_info(index_column_dict, data)
 
-		return data, attributes, index_column_dict, column_index_dict
+		return data, attributes, header, index_column_dict, column_index_dict
 	
 	def _set_attributes_info(self, index_column_dict, data):
 		attributes = dict()
@@ -130,7 +130,7 @@ class Data:
 	def __len__(self):
 		return len(self.raw_data)
 
-def information_gain_per_column (subset_data, col):
+def information_gain_per_column (subset_data, features, col):
     # Compute the entropy of the labels first
     unique_labels = np.unique (subset_data[:, 0])
     if unique_labels.shape[0] == 1:
@@ -151,37 +151,54 @@ def information_gain_per_column (subset_data, col):
         label_entropy -= (division_result) * math.log (division_result, 2)
 
     print ("Label Entropy : ", label_entropy)
+
 	# See how many different inputs are there in the column
+    unique_values = np.unique (subset_data[:, col])
+
 	# For each different type of input in a column, compute the entropy
+
+    # Find how many different types of values are there and how many times each value occurs
+    i = 0
+    no_of_occurence_per_value = np.zeros (unique_values.shape[0])
+
+    for i in range (0, unique_values.shape[0]):
+        for j in range (0, subset_data[:, 0].shape[0]):
+            if subset_data [j, col] == unique_values [i]:
+                no_of_occurence_per_value [i] += 1
+
+    # Debug print
+    for i in range (0, unique_values.shape[0]):
+        print (features[col], ":", unique_values[i], ":", no_of_occurence_per_value[i])
+
 	# Find the the +ve and -ve outcomes for each different type of input
 	# Compute expected entropy
 	# Compute Information Gain = H (Label) - Expected entropy (Column)
 	# Returns information gain per column
     return subset_data
 
-def information_gain_all_columns (subset_data, attributes):
+def information_gain_all_columns (subset_data, features):
     # Find how many different columns are there and loop for all of them
     no_of_col = subset_data.shape[1]
 
     # Create a single dimensional array to save all the information gain computed
-    info_gain_per_column = np.zeros ((no_of_col, 1))
+    info_gain_per_column = np.zeros ((no_of_col,), dtype=int)
 
     # Call information_gain_per_column (subset_data, col)
-    for col in info_gain_per_column:
-        information_gain_per_column (subset_data, col)
+    for col in range (0, no_of_col):
+        information_gain_per_column (subset_data, features, col)
 
     # Return the information_gain_per_column array
     return subset_data
 
-def get_next_attribute (subset_data, attributes):
-    # Call information_gain_all_columns (subset_data, attributes)
-    # information_gain_all_columns (subset_data, attributes)
+def get_next_feature (subset_data, features):
+    # Call information_gain_all_columns (subset_data, features)
+    # information_gain_all_columns (subset_data, features)
     # Select the attribute that has the maximum value in information_gain_per_column []
     # Return the Attribute Name and Column index
-    information_gain_all_columns (subset_data, attributes)
+    information_gain_all_columns (subset_data, features)
     return subset_data
 
-def add_node (subset_data, attributes):
+def add_node (subset_data, features):
     # If the every label is either +ve or -ve then the tree is complete at this branch, add the decision and return """
 
     # Take the label column and check if everything is same """
@@ -195,13 +212,13 @@ def add_node (subset_data, attributes):
 
     #The tree is not complete yet. Because the labels differ, branching possible """
 
-    #Check which can be the new attribute that is added to the tree by information gain """
-    selected_attribute = get_next_attribute (subset_data, attributes)
+    #Check which can be the new feature that is added to the tree by information gain """
+    selected_feature = get_next_feature (subset_data, features)
 
 
 mango = Data (fpath = "Mango_train.csv")
 
-add_node (mango.raw_data, mango.attributes)
+add_node (mango.raw_data, mango.features)
 
 
 #Create a new node, named by the attribute """
