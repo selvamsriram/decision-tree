@@ -5,6 +5,15 @@ import numpy as np
 #1 = enabled 0 = disabled
 debug = 1
 
+class Node:
+    def __init__(self, feature):
+        self.feature = feature 
+        self.children = []
+        self.decision = ""
+
+    def __str__(self):
+        return self.feature
+
 class Attribute:
 	pass
 
@@ -136,6 +145,7 @@ def information_gain_per_column (subset_data, features, col):
     unique_labels = np.unique (subset_data[:, 0])
     if unique_labels.shape[0] == 1:
         label_entropy = 0
+        return label_entropy
     else:
         count = np.zeros ((unique_labels.shape[0], 1))
         for i in range (0, unique_labels.shape[0]):                     # For each unique label
@@ -200,53 +210,97 @@ def information_gain_per_column (subset_data, features, col):
 
     print ("Information Gain for :", features[col], ":", info_gain)
 	# Returns information gain per column
-    return subset_data
+    return info_gain 
 
 def information_gain_all_columns (subset_data, features):
     # Find how many different columns are there and loop for all of them
     no_of_col = subset_data.shape[1]
 
     # Create a single dimensional array to save all the information gain computed
-    info_gain_per_column = np.zeros ((no_of_col,), dtype=int)
+    info_gain_per_column = np.zeros (no_of_col)
 
     # Call information_gain_per_column (subset_data, col)
     for col in range (1, no_of_col):
-        information_gain_per_column (subset_data, features, col)
+        info_gain_per_column[col] = information_gain_per_column (subset_data, features, col)
 
     # Return the information_gain_per_column array
-    return subset_data
+    return info_gain_per_column 
 
 def get_next_feature (subset_data, features):
     # Call information_gain_all_columns (subset_data, features)
     # information_gain_all_columns (subset_data, features)
     # Select the attribute that has the maximum value in information_gain_per_column []
     # Return the Attribute Name and Column index
-    information_gain_all_columns (subset_data, features)
+    info_gain_per_column = information_gain_all_columns (subset_data, features)
+    next_col_index = np.argmax (info_gain_per_column)
+    return next_col_index, features[next_col_index] 
+
+def get_row_subset(data, col_index, attribute_value):
+    subset_data = copy.deepcopy(data)
+    subset_data = subset_data [subset_data[:, col_index] == attribute_value]
     return subset_data
 
 def add_node (subset_data, features):
     # If the every label is either +ve or -ve then the tree is complete at this branch, add the decision and return """
 
     # Take the label column and check if everything is same """
-    unique_labels = np.unique (mango.raw_data[:, 0]).shape[0]
+    unique_labels = np.unique (subset_data[:, 0]).shape[0]
     if unique_labels == 1:
         # Take action now, and assign this as the decision for this branch
         if debug == 1:
             print ("Labels are the same")
+        node = Node ("")
+        node.decision = np.unique (subset_data[:, 0])
+        return node
     elif debug == 1:
             print ("unique labels", unique_labels)
 
     #The tree is not complete yet. Because the labels differ, branching possible """
 
     #Check which can be the new feature that is added to the tree by information gain """
-    selected_feature = get_next_feature (subset_data, features)
+    selected_col_index, selected_feature = get_next_feature (subset_data, features)
+    selected_feature_unique_values = np.unique (subset_data[:, selected_col_index])
 
+    node = Node (selected_feature)
+    print ("selected_col_index : ", selected_col_index, ",selected_feature : ", selected_feature, ",Value Count", selected_feature_unique_values.shape[0])
+    for i in range (0, selected_feature_unique_values.shape[0]):
+        # Alter the subset data here
+        new_subset = get_row_subset (subset_data, selected_col_index, selected_feature_unique_values[i]) 
+        # Delete the selected column from the new_subset
+        new_subset = np.delete(new_subset, selected_col_index, 1)
+        # Delete from the feature subset also
+        new_feature_subset = copy.deepcopy (features)
+        new_feature_subset = np.delete (new_feature_subset, selected_col_index, 0) 
+        # Call the function again with subset data
+        child_node = add_node (new_subset, new_feature_subset)
+        # Add the node to the tree
+        node.children.append((selected_feature_unique_values[i], child_node))
+
+    return node
+
+def empty(size):
+    s = ""
+    for x in range(size):
+        s += "   "
+    return s
+
+
+def print_tree(node, level):
+    if node.decision != "":
+        print (empty(level), node.decision)
+        return
+
+    print (empty(level), node.feature)
+
+    for value, n in node.children:
+        print (empty(level + 1), value)
+        print_tree(n, level + 2)
 
 mango = Data (fpath = "Tennis_Game.csv")
 
-add_node (mango.raw_data, mango.features)
+node = add_node (mango.raw_data, mango.features)
 
-
+print_tree (node, 0)
 # Create a new node, named by the attribute """
 # Delete the selected attribute from the dataset (Delete the column completely) """
 # For each different type of input this attribute can take, we must add a branch and leading decision """
