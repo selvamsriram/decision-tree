@@ -242,15 +242,15 @@ def add_node (subset_data, features):
     selected_feature = get_next_feature (subset_data, features)
 
 
-mango = Data (fpath = "Mango_train.csv")
+mango = Data (fpath = "Tennis_Game.csv")
 
 add_node (mango.raw_data, mango.features)
 
 
-#Create a new node, named by the attribute """
-#Delete the selected attribute from the dataset (Delete the column completely) """
-#For each different type of input this attribute can take, we must add a branch and leading decision """
-#Call add_node (subset, attribute_data) and obtain the child node to be added as decision """
-#Add the given child and the link in 2 dimensional array which has columns [Value of the parent, Leading Decision/child tree] """
-#Return the newly added node """	
+# Create a new node, named by the attribute """
+# Delete the selected attribute from the dataset (Delete the column completely) """
+# For each different type of input this attribute can take, we must add a branch and leading decision """
+# Call add_node (subset, attribute_data) and obtain the child node to be added as decision """
+# Add the given child and the link in 2 dimensional array which has columns [Value of the parent, Leading Decision/child tree] """
+# Return the newly added node """	
 
