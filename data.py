@@ -132,6 +132,7 @@ class Data:
 
 def information_gain_per_column (subset_data, features, col):
     # Compute the entropy of the labels first
+    dict = {}
     unique_labels = np.unique (subset_data[:, 0])
     if unique_labels.shape[0] == 1:
         label_entropy = 0
@@ -170,9 +171,34 @@ def information_gain_per_column (subset_data, features, col):
     for i in range (0, unique_values.shape[0]):
         print (features[col], ":", unique_values[i], ":", no_of_occurence_per_value[i])
 
+    entropy_per_attr_value = np.zeros (unique_values.shape[0])
 	# Find the the +ve and -ve outcomes for each different type of input
+    for i in range (0, unique_values.shape[0]):
+        # Get the subset rows to compute entropy of this attribute value
+        count = np.zeros ((unique_labels.shape[0], 1))
+        for j in range (0, unique_labels.shape[0]):
+            #Check how many times particular label comes for each attribute value
+            for k in range (0, subset_data[:, 0].shape[0]):
+                if subset_data [k, col] == unique_values[i]:
+                    if subset_data [k, 0] == unique_labels[j]:
+                        count [j] += 1
+        print (features[col], "Value : ", unique_values[i], unique_labels, count)
+        for j in range (0, unique_labels.shape[0]):
+            if count[j] != 0:
+                division_result = (count[j]/no_of_occurence_per_value[i])
+                entropy_per_attr_value [i] -= (division_result) * math.log (division_result, 2)
+
 	# Compute expected entropy
+    expected_entropy_for_column = 0
+    for i in range (0, unique_values.shape[0]):
+        expected_entropy_for_column += (no_of_occurence_per_value[i]/row_size) * entropy_per_attr_value [i]
+
+    print ("Expected Entropy", expected_entropy_for_column)
+
 	# Compute Information Gain = H (Label) - Expected entropy (Column)
+    info_gain = label_entropy - expected_entropy_for_column
+
+    print ("Information Gain for :", features[col], ":", info_gain)
 	# Returns information gain per column
     return subset_data
 
@@ -184,7 +210,7 @@ def information_gain_all_columns (subset_data, features):
     info_gain_per_column = np.zeros ((no_of_col,), dtype=int)
 
     # Call information_gain_per_column (subset_data, col)
-    for col in range (0, no_of_col):
+    for col in range (1, no_of_col):
         information_gain_per_column (subset_data, features, col)
 
     # Return the information_gain_per_column array
