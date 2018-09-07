@@ -1,0 +1,167 @@
+Depth = 1
+------------------------------------
+Training Folds = 2,3,4,5
+Testing Fold   = 1
+Accuracy       = 
+
+Training Folds = 1,3,4,5
+Testing Fold   = 2
+Accuracy       = 
+
+Training Folds = 1,2,4,5
+Testing Fold   = 3
+Accuracy       = 
+
+Training Folds = 1,2,3,5
+Testing Fold   = 4
+Accuracy       = 
+
+Training Folds = 1,2,3,4
+Testing Fold   = 5
+Accuracy       = 
+
+Average Accuracy for Depth = 1 is 
+
+Depth = 2
+------------------------------------
+Training Folds = 2,3,4,5
+Testing Fold   = 1
+Accuracy       = 
+
+Training Folds = 1,3,4,5
+Testing Fold   = 2
+Accuracy       = 
+
+Training Folds = 1,2,4,5
+Testing Fold   = 3
+Accuracy       = 
+
+Training Folds = 1,2,3,5
+Testing Fold   = 4
+Accuracy       = 
+
+Training Folds = 1,2,3,4
+Testing Fold   = 5
+Accuracy       = 
+
+Average Accuracy for Depth = 2 is 
+
+Depth = 3
+------------------------------------
+Training Folds = 2,3,4,5
+Testing Fold   = 1
+Accuracy       = 
+
+Training Folds = 1,3,4,5
+Testing Fold   = 2
+Accuracy       = 
+
+Training Folds = 1,2,4,5
+Testing Fold   = 3
+Accuracy       = 
+
+Training Folds = 1,2,3,5
+Testing Fold   = 4
+Accuracy       = 
+
+Training Folds = 1,2,3,4
+Testing Fold   = 5
+Accuracy       = 
+
+Average Accuracy for Depth = 3 is 
+
+Depth = 4
+------------------------------------
+Training Folds = 2,3,4,5
+Testing Fold   = 1
+Accuracy       = 
+
+Training Folds = 1,3,4,5
+Testing Fold   = 2
+Accuracy       = 
+
+Training Folds = 1,2,4,5
+Testing Fold   = 3
+Accuracy       = 
+
+Training Folds = 1,2,3,5
+Testing Fold   = 4
+Accuracy       = 
+
+Training Folds = 1,2,3,4
+Testing Fold   = 5
+Accuracy       = 
+
+Average Accuracy for Depth = 4 is 
+
+Depth = 5
+------------------------------------
+Training Folds = 2,3,4,5
+Testing Fold   = 1
+Accuracy       = 
+
+Training Folds = 1,3,4,5
+Testing Fold   = 2
+Accuracy       = 
+
+Training Folds = 1,2,4,5
+Testing Fold   = 3
+Accuracy       = 
+
+Training Folds = 1,2,3,5
+Testing Fold   = 4
+Accuracy       = 
+
+Training Folds = 1,2,3,4
+Testing Fold   = 5
+Accuracy       = 
+
+Average Accuracy for Depth = 5 is 
+
+Depth = 10
+------------------------------------
+Training Folds = 2,3,4,5
+Testing Fold   = 1
+Accuracy       = 
+
+Training Folds = 1,3,4,5
+Testing Fold   = 2
+Accuracy       = 
+
+Training Folds = 1,2,4,5
+Testing Fold   = 3
+Accuracy       = 
+
+Training Folds = 1,2,3,5
+Testing Fold   = 4
+Accuracy       = 
+
+Training Folds = 1,2,3,4
+Testing Fold   = 5
+Accuracy       = 
+
+Average Accuracy for Depth = 10 is 
+
+Depth = 15
+------------------------------------
+Training Folds = 2,3,4,5
+Testing Fold   = 1
+Accuracy       = 
+
+Training Folds = 1,3,4,5
+Testing Fold   = 2
+Accuracy       = 
+
+Training Folds = 1,2,4,5
+Testing Fold   = 3
+Accuracy       = 
+
+Training Folds = 1,2,3,5
+Testing Fold   = 4
+Accuracy       = 
+
+Training Folds = 1,2,3,4
+Testing Fold   = 5
+Accuracy       = 
+
+Average Accuracy for Depth = 15 is 
