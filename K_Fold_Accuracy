@@ -20,7 +20,7 @@ Training Folds = 1,2,3,4
 Testing Fold   = 5
 Accuracy       = 77.339
 
-Average Accuracy for Depth = 1 is 
+Average Accuracy for Depth = 1 is 76.009 
 
 Depth = 2
 ------------------------------------
@@ -44,7 +44,7 @@ Training Folds = 1,2,3,4
 Testing Fold   = 5
 Accuracy       = 94.396 
 
-Average Accuracy for Depth = 2 is 
+Average Accuracy for Depth = 2 is 94.6328
 
 Depth = 3
 ------------------------------------
@@ -68,7 +68,7 @@ Training Folds = 1,2,3,4
 Testing Fold   = 5
 Accuracy       = 94.950
 
-Average Accuracy for Depth = 3 is 
+Average Accuracy for Depth = 3 is 95.888 
 
 Depth = 4
 ------------------------------------
@@ -92,7 +92,7 @@ Training Folds = 1,2,3,4
 Testing Fold   = 5
 Accuracy       = 94.950
 
-Average Accuracy for Depth = 4 is 
+Average Accuracy for Depth = 4 is 95.765 
 
 Depth = 5
 ------------------------------------
@@ -116,7 +116,7 @@ Training Folds = 1,2,3,4
 Testing Fold   = 5
 Accuracy       = 94.950 
 
-Average Accuracy for Depth = 5 is 
+Average Accuracy for Depth = 5 is 96.282 
 
 Depth = 10
 ------------------------------------
@@ -140,7 +140,7 @@ Training Folds = 1,2,3,4
 Testing Fold   = 5
 Accuracy       = 94.950 
 
-Average Accuracy for Depth = 10 is 
+Average Accuracy for Depth = 10 is 96.380 
 
 Depth = 15
 ------------------------------------
@@ -164,4 +164,4 @@ Training Folds = 1,2,3,4
 Testing Fold   = 5
 Accuracy       = 94.9507 
 
-Average Accuracy for Depth = 15 is 
+Average Accuracy for Depth = 15 is 96.380 
