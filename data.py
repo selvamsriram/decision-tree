@@ -4,6 +4,7 @@ import numpy as np
 
 #1 = enabled 0 = disabled
 debug = 1
+weight = {"Shape":10, "Color":30, "Size":50, "Material":100}
 
 class Node:
     def __init__(self, feature):
@@ -161,7 +162,7 @@ def information_gain_per_column (subset_data, features, col):
         division_result = (count[i]/row_size)
         label_entropy -= (division_result) * math.log (division_result, 2)
 
-    print ("Label Entropy : ", label_entropy)
+    #print ("Label Entropy : ", label_entropy)
 
 	# See how many different inputs are there in the column
     unique_values = np.unique (subset_data[:, col])
@@ -178,8 +179,8 @@ def information_gain_per_column (subset_data, features, col):
                 no_of_occurence_per_value [i] += 1
 
     # Debug print
-    for i in range (0, unique_values.shape[0]):
-        print (features[col], ":", unique_values[i], ":", no_of_occurence_per_value[i])
+    #for i in range (0, unique_values.shape[0]):
+    #    print (features[col], ":", unique_values[i], ":", no_of_occurence_per_value[i])
 
     entropy_per_attr_value = np.zeros (unique_values.shape[0])
 	# Find the the +ve and -ve outcomes for each different type of input
@@ -192,7 +193,7 @@ def information_gain_per_column (subset_data, features, col):
                 if subset_data [k, col] == unique_values[i]:
                     if subset_data [k, 0] == unique_labels[j]:
                         count [j] += 1
-        print (features[col], "Value : ", unique_values[i], unique_labels, count)
+        #print (features[col], "Value : ", unique_values[i], unique_labels, count)
         for j in range (0, unique_labels.shape[0]):
             if count[j] != 0:
                 division_result = (count[j]/no_of_occurence_per_value[i])
@@ -203,14 +204,21 @@ def information_gain_per_column (subset_data, features, col):
     for i in range (0, unique_values.shape[0]):
         expected_entropy_for_column += (no_of_occurence_per_value[i]/row_size) * entropy_per_attr_value [i]
 
-    print ("Expected Entropy", expected_entropy_for_column)
+    #print ("Expected Entropy", expected_entropy_for_column)
 
 	# Compute Information Gain = H (Label) - Expected entropy (Column)
     info_gain = label_entropy - expected_entropy_for_column
 
     print ("Information Gain for :", features[col], ":", info_gain)
+
+    info_gain_t = (info_gain * info_gain)/weight[features[col]]
+    print ("Information Gain T for :", features[col], " Weight :", weight[features[col]], ":", info_gain_t)
+
+    info_gain_s = ((2**info_gain) - 1)/(math.sqrt (weight[features[col]] + 1))
+    print ("Information Gain S for :", features[col], " Weight :", weight[features[col]], ":", info_gain_s)
+
 	# Returns information gain per column
-    return info_gain 
+    return info_gain
 
 def information_gain_all_columns (subset_data, features):
     # Find how many different columns are there and loop for all of them
@@ -247,13 +255,13 @@ def add_node (subset_data, features):
     unique_labels = np.unique (subset_data[:, 0]).shape[0]
     if unique_labels == 1:
         # Take action now, and assign this as the decision for this branch
-        if debug == 1:
-            print ("Labels are the same")
+        #if debug == 1:
+        #    print ("Labels are the same")
         node = Node ("")
         node.decision = np.unique (subset_data[:, 0])[0]
         return node
-    elif debug == 1:
-            print ("unique labels", unique_labels)
+    #elif debug == 1:
+    #        print ("unique labels", unique_labels)
 
     #The tree is not complete yet. Because the labels differ, branching possible """
 
@@ -262,7 +270,7 @@ def add_node (subset_data, features):
     selected_feature_unique_values = np.unique (subset_data[:, selected_col_index])
 
     node = Node (selected_feature)
-    print ("selected_col_index : ", selected_col_index, ",selected_feature : ", selected_feature, ",Value Count", selected_feature_unique_values.shape[0])
+    #print ("selected_col_index : ", selected_col_index, ",selected_feature : ", selected_feature, ",Value Count", selected_feature_unique_values.shape[0])
     for i in range (0, selected_feature_unique_values.shape[0]):
         # Alter the subset data here
         new_subset = get_row_subset (subset_data, selected_col_index, selected_feature_unique_values[i]) 
@@ -324,15 +332,15 @@ def test_dtree(root, test_data, features):
     
     print ("Mismatch : ", mismatch, "Match", match)
 
-#mango = Data (fpath = "Tennis_Game_train.csv")
-mango = Data (fpath = "train.csv")
+#mango = Data (fpath = "train.csv")
+mango = Data (fpath = "weight_table.csv")
 
 root = add_node (mango.raw_data, mango.features)
 
 print_tree (root, 0)
 
-#test = Data (fpath = "Tennis_Game_test.csv")
-test = Data (fpath = "test.csv")
+#test = Data (fpath = "test.csv")
+test = Data (fpath = "weight_table.csv")
 test_dtree (root, test.raw_data, test.features)
 
 
