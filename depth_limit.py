@@ -185,8 +185,6 @@ def add_node (subset_data, features, current_depth, allowed_depth):
         node = Node ("")
         node.decision = unique_labels[decision_index]
         return node
-
-
  
     # Take the label column and check if everything is same """
     unique_labels = np.unique (subset_data[:, 0]).shape[0]
@@ -223,13 +221,6 @@ def add_node (subset_data, features, current_depth, allowed_depth):
 
     return node
 
-def space(size):
-    s = ""
-    for i in range(size):
-        s += "   "
-    return s
-
-
 def test_dtree_per_row (node, test_row, col_index_feature_dict, feature_col_index_dict):
     if node.decision != "":
         return node.decision
@@ -260,6 +251,7 @@ def test_dtree(root, test_data, features):
     #print ("Accuracy : ", accuracy*100, "%")
     return (accuracy*100)
 
+#-------------------------------- Main function calls start below this ---------------
 mango = Data (fpath = "train.csv")
 root = add_node (mango.raw_data, mango.features, 0, 100)
 test = Data (fpath = "test.csv")
@@ -270,47 +262,30 @@ print ("Testing File       : test.csv")
 print ("Accuracy           :", accuracy, "%\n")
 
 #----------------------------------- K Fold and Depth Limiting -----------------------
-depth = [1,2,3,4,5,10,15]
-depth_avg_accuracy = []
+depths = [1, 2, 3, 4, 5, 10, 15]
+kfold  = 5
 
-for i in range (0, len(depth)):
-   accuracy = 0
-   mango = Data (fpath = "Fold_1234.csv")
-   root = add_node (mango.raw_data, mango.features, 0, depth[i])
-   test = Data (fpath = "fold5.csv")
-   accuracy_1 = test_dtree (root, test.raw_data, test.features)
-   #print ("Training Folds 1,2,3,4 Testing Fold 5 Depth", depth[i], "Accuracy : ", accuracy_1, "%")
+for depth in depths:
+    accuracy = np.zeros(5)
+    for i in range (1, kfold+1):
+        tmp_array = []
+        for j in range (1, kfold+1):
+            if (i != j):
+                if not tmp_array:
+                    tmp_array = [np.loadtxt ('fold'+str(j)+'.csv', delimiter=',', dtype = str)]
+                else:
+                    tmp_array.append (np.loadtxt ('fold'+str(j)+'.csv', delimiter=',', dtype = str, skiprows = 1))
 
-   mango = Data (fpath = "Fold_1235.csv")
-   root = add_node (mango.raw_data, mango.features, 0, depth[i])
-   test = Data (fpath = "fold4.csv")
-   accuracy_2 = test_dtree (root, test.raw_data, test.features)
-   #print ("Training Folds 1,2,3,5 Testing Fold 4 Depth", depth[i], "Accuracy : ", accuracy_2, "%")
+        train_data = np.concatenate (tmp_array)
+        mango = Data (data = train_data)
+        root = add_node (mango.raw_data, mango.features, 0, depth)
+        test_data = Data (fpath = 'fold'+str(i)+'.csv')
+        accuracy[i - 1] = test_dtree (root, test_data.raw_data, test_data.features)
 
-   mango = Data (fpath = "Fold_1245.csv")
-   root = add_node (mango.raw_data, mango.features, 0, depth[i])
-   test = Data (fpath = "fold3.csv")
-   accuracy_3 = test_dtree (root, test.raw_data, test.features)
-   #print ("Training Folds 1,2,4,5 Testing Fold 3 Depth", depth[i], "Accuracy : ", accuracy_3, "%")
-
-   mango = Data (fpath = "Fold_1345.csv")
-   root = add_node (mango.raw_data, mango.features, 0, depth[i])
-   test = Data (fpath = "fold2.csv")
-   accuracy_4 = test_dtree (root, test.raw_data, test.features)
-   #print ("Training Folds 1,3,4,5 Testing Fold 2 Depth", depth[i], "Accuracy : ", accuracy_4, "%")
-
-   mango = Data (fpath = "Fold_2345.csv")
-   root = add_node (mango.raw_data, mango.features, 0, depth[i])
-   test = Data (fpath = "fold1.csv")
-   accuracy_5 = test_dtree (root, test.raw_data, test.features)
-   #print ("Training Folds 2,3,4,5 Testing Fold 1 Depth", depth[i], "Accuracy : ", accuracy_5, "%")
-
-   avg_accuracy = (accuracy_1 + accuracy_2 + accuracy_3 + accuracy_4 + accuracy_5)/5
-   std_accuracy = [accuracy_1, accuracy_2, accuracy_3, accuracy_4, accuracy_5]
-   std_dev = np.std (std_accuracy)
-   print ("Depth              :", depth[i])
-   print ("Average Accuracy   :", avg_accuracy, "%")
-   print ("Standard Deviation :", std_dev, "\n")
-
+    avg_accuracy = np.mean (accuracy)
+    std_dev = np.std (accuracy)
+    print ("Depth              :", depth)
+    print ("Average Accuracy   :", avg_accuracy, "%")
+    print ("Standard Deviation :", std_dev, "\n")
 # ------------------------ K Fold and Depth Limiting code ends -------------------------
 
