@@ -1,0 +1,33 @@
+Depth              : Unlimited
+Training File      : train.csv
+Testing File       : test.csv
+Accuracy           : 100.0 %
+
+Depth              : 1
+Average Accuracy   : 76.18683001531392 %
+Standard Deviation : 13.343614877560428 
+
+Depth              : 2
+Average Accuracy   : 94.77794793261869 %
+Standard Deviation : 4.238226805652209 
+
+Depth              : 3
+Average Accuracy   : 95.92649310872895 %
+Standard Deviation : 4.3024801407002995 
+
+Depth              : 4
+Average Accuracy   : 95.83460949464012 %
+Standard Deviation : 3.617980099441276 
+
+Depth              : 5
+Average Accuracy   : 96.3093415007657 %
+Standard Deviation : 3.271022248042386 
+
+Depth              : 10
+Average Accuracy   : 96.35528330781011 %
+Standard Deviation : 3.320547197474912 
+
+Depth              : 15
+Average Accuracy   : 96.35528330781011 %
+Standard Deviation : 3.320547197474912 
+
